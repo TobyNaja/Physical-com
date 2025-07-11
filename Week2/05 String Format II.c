@@ -17,6 +17,6 @@ int main(){
     printf("%10.2f\n", f_number);
     printf("%.1f\n", f_number);
     printf("%.3f\n", f_number);
-
+ 
     return 0;
 }

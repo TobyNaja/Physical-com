@@ -11,6 +11,6 @@ int main(){
     printf("%25.10s*\n", text);
     printf("%25.5s*\n", text);
     printf("%-25.10s*\n", text);
-
+ 
     return 0;
 }
