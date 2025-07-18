@@ -10,7 +10,7 @@ int main(){
     printf("%8d %8d %8d\n", number1, number2, number3);
     printf("%08d %08d %08d\n", number1, number2, number3);
     printf("%-8d %-8d %-8d\n", number1, number2, number3);
-    printf("%10f\n", f_number);
+    printf("%f\n", f_number);
     printf("%3f\n", f_number);
     printf("%-10f\n", f_number);
     printf("%-10.3f\n", f_number);
