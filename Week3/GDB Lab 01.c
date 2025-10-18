@@ -3,10 +3,9 @@
 int main() {
     int a = 17, b = 25, c = 50, d = 10;
 
-    d = b % a + c / b;	
-    d = b % a++ + c / b;	
-    d = b % ++a + c / b;	
-    d = b % (a + c) / b;
+    d = a++ + b++ + c++;
+    d = ++a + ++b + ++c;
 
     return 0;
 }
+duble
