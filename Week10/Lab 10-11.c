@@ -1,76 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
- 
-typedef struct student_info{
-    char name[60];
-    char surname[60];
-    char sex[10];
+#include <ctype.h>
+
+typedef struct info{
+    char fname[61];
+    char lname[61];
+    char sex[7];
     int age;
-    char id[12];
+    char id[13];
     double gpa;
-}Student;
- 
-int cmp_name(const void *a, const void *b) {
-    Student *s1 = *(Student **)a;
-    Student *s2 = *(Student **)b;
-    return strcmp(s1->name, s2->name);
+} Student;
+
+void sort_name(Student **list){
+    for (int i = 0; i < 20 - 1; i++){
+        int swapped = 0;
+        for (int j = 0; j < 20 - 1 - i; j++){
+            if (strcmp(list[j]->fname, list[j+1]->fname) > 0){
+                Student *tmp = list[j];
+                list[j] = list[j+1];
+                list[j+1] = tmp;
+                swapped = 1;
+            }
+        }
+        if (!swapped) break;
+    }
 }
- 
-int cmp_surname(const void *a, const void *b) {
-    Student *s1 = *(Student **)a;
-    Student *s2 = *(Student **)b;
-    return strcmp(s1->surname, s2->surname);
+
+void sort_surname(Student **list){
+    for (int i = 0; i < 20 - 1; i++){
+        int swapped = 0;
+        for (int j = 0; j < 20 - 1 - i; j++){
+            if (strcmp(list[j]->lname, list[j+1]->lname) > 0){
+                Student *tmp = list[j];
+                list[j] = list[j+1];
+                list[j+1] = tmp;
+                swapped = 1;
+            }
+        }
+        if (!swapped) break;
+    }
 }
- 
-int cmp_id(const void *a, const void *b) {
-    Student *s1 = *(Student **)a;
-    Student *s2 = *(Student **)b;
-    return strcmp(s1->id, s2->id);
+
+void sort_id(Student **list){
+    for (int i = 0; i < 20 - 1; i++){
+        int swapped = 0;
+        for (int j = 0; j < 20 - 1 - i; j++){
+            if (strcmp(list[j]->id, list[j+1]->id) > 0){
+                Student *tmp = list[j];
+                list[j] = list[j+1];
+                list[j+1] = tmp;
+                swapped = 1;
+            }
+        }
+        if (!swapped) break;
+    }
 }
- 
+
 int main(){
     Student *mylist[20];
-    for (int i = 0;i < 20;i++){
-        mylist[i] = malloc(sizeof(Student));
+    for (int i = 0; i < 20; i++){
+        mylist[i] = (Student*) malloc(sizeof(Student));
         scanf("%s %s %s %d %s %lf", 
-            mylist[i]->name, mylist[i]->surname, mylist[i]->sex, &mylist[i]->age, mylist[i]->id, &mylist[i]->gpa);
+            mylist[i]->fname, mylist[i]->lname, mylist[i]->sex, &mylist[i]->age, mylist[i]->id, &mylist[i]->gpa);
     }
-    char condi[10];
-    scanf("%s",condi);
-    int n = sizeof(mylist) / sizeof(mylist[0]);
- 
-    if (strcmp(condi,"name") == 0){
-        qsort(mylist,n,sizeof(Student*),cmp_name);
+    char con[10];
+    scanf("%s",con);
+    for (int i = 0; i < 10; i++){
+        con[i] = tolower(con[i]);
     }
-    else if(strcmp(condi,"surname") == 0){
-        qsort(mylist,n,sizeof(Student*),cmp_surname);
-    }
-    else if(strcmp(condi,"id") == 0){
-        qsort(mylist,n,sizeof(Student*),cmp_id);
-    }
- 
-    for (int i = 0; i < n; i++) {
-        if (strcmp(mylist[i]->sex, "Male") == 0) {
-            printf("Mr %c %s (%d) ID: %s GPA %.2lf\n",
-                   mylist[i]->name[0],
-                   mylist[i]->surname,
-                   mylist[i]->age,
-                   mylist[i]->id,
-                   mylist[i]->gpa);
-        } else {
-            printf("Miss %c %s (%d) ID: %s GPA %.2lf\n",
-                   mylist[i]->name[0],
-                   mylist[i]->surname,
-                   mylist[i]->age,
-                   mylist[i]->id,
-                   mylist[i]->gpa);
+    if (strcmp(con,"name")==0) sort_name(mylist);
+    else if (strcmp(con, "surname") == 0) sort_surname(mylist);
+    else if (strcmp(con, "id") == 0) sort_id(mylist);
+
+    for (int i = 0; i < 20; i++){
+        if (strcmp(mylist[i]->sex, "Male") == 0){
+            printf("Mr %c %s (%d) ID: %s GPA %.2lf\n",mylist[i]->fname[0], mylist[i]->lname, mylist[i]->age, mylist[i]->id, mylist[i]->gpa);
+        }
+        else{
+            printf("Miss %c %s (%d) ID: %s GPA %.2lf\n",mylist[i]->fname[0], mylist[i]->lname, mylist[i]->age, mylist[i]->id, mylist[i]->gpa);
         }
     }
- 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < 20; i++) {
         free(mylist[i]);
     }
-     
+
     return 0;
 }

@@ -1,135 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct DataNode{
-    char *data;
-    struct DataNode *next;
-}DataNode;
-
-typedef struct SinglyLinkedList{
-    unsigned count;
-    DataNode *head;
-}SinglyLinkedList;
-
-DataNode* createDataNode(char* data){
-    DataNode *node  = malloc(sizeof(DataNode));
-    node->data = malloc(strlen(data)+1);
-    strcpy(node->data,data);
-    node->next = NULL;
-    return node;
-}
-
-SinglyLinkedList* createSinglyLinkedList(){
-    SinglyLinkedList *list = malloc(sizeof(SinglyLinkedList));
-    list->count = 0;
-    list->head = NULL;
-    return list;
-}
-
-void insert_front(SinglyLinkedList *list, char *data){
-    DataNode *pNew = createDataNode(data);
-
-    if (list->count == 0){
-        list->head = pNew;
-    }
-    else{
-        pNew->next = list->head;
-        list->head = pNew;
-    }
-    list->count++;
-}
-
-void insert_last(SinglyLinkedList *list, char *data){
-    DataNode *pNew = createDataNode(data);
-    if (list->count == 0){
-        list->head = pNew;
-    }
-    else{
-        DataNode *pointer = list->head;
-        while (pointer->next != NULL){
-            pointer = pointer->next;
+#include <ctype.h>
+ 
+typedef struct info{
+    char fname[61];
+    char lname[61];
+    char sex[7];
+    int age;
+    char id[13];
+    double gpa;
+} Student;
+ 
+void sort_name(Student **list){
+    int walker, smallest;
+    Student *temp;
+    for (int i = 0; i < 20 ;i++){
+        smallest = i;
+        walker = i + 1;
+        while (walker < 20){
+            if(strcmp(list[smallest]->fname, list[walker]->fname ) > 0){
+                smallest = walker;
+            }
+            walker++;
         }
-        pointer->next = pNew;
+        temp = list[i];
+        list[i] = list[smallest];
+        list[smallest] = temp;
     }
-    list->count++;
 }
-
-void delete(SinglyLinkedList *list, char *data){
-    DataNode *current = list->head;
-    DataNode *previous = NULL;
-
-    if (list->count == 0){
-        printf("Cannot delete, %s does not exist.\n",data);
-        return;
+ 
+void sort_surname(Student **list){
+    int smallest, walker;
+    Student *temp;
+    for (int i = 0; i < 20; i++){
+        smallest = i;
+        walker = i + 1;
+        while (walker < 20){
+            if(strcmp(list[smallest]->lname,list[walker]->lname) > 0){
+                smallest = walker;
+            }
+            walker++;
+        }
+        temp = list[i];
+        list[i] = list[smallest];
+        list[smallest] = temp;
+         
     }
-    if (strcmp(current->data,data) == 0){
-        list->head = current->next;
-        free(current->data);
-        free(current);
-        list->count--;
-        return;
-    }
-    while (current != NULL && strcmp(current->data,data) != 0){
-        previous = current;
-        current = current->next;
-    }
-    if (current == NULL) {
-        printf("Cannot delete, %s does not exist.\n", data);
-        return;
-    }
-    previous->next = current->next;
-    free(current->data);
-    free(current);
-    list->count--;
-    return;
 }
-
-void traverse(SinglyLinkedList *list){
-    if (list->count == 0) {
-        printf("This is an empty list.\n");
-        return;
+ 
+void sort_id(Student **list){
+    int smallest, walker;
+    Student *temp;
+    for (int i = 0; i < 20; i++){
+        smallest = i;
+        walker = i + 1;
+        while (walker < 20){
+            if(strcmp(list[smallest]->id,list[walker]->id) > 0){
+                smallest = walker;
+            }
+            walker++;
+        }
+        temp = list[i];
+        list[i] = list[smallest];
+        list[smallest] = temp;
+         
     }
-    
-    DataNode *pointer = list->head;
-    while (pointer->next != NULL){
-        printf("%s -> ",pointer->data);
-        pointer = pointer->next;
-    }
-    printf("%s",pointer->data);
-    return;
-    
 }
-
-int main() {
-    SinglyLinkedList* mylist = createSinglyLinkedList();
-    int n;
-    char condition;
-    char data[100];
-    scanf("%d", &n);
-
-    for (int i = 0; i < n; i++) {
-        scanf(" %c: %[^\n]", &condition, data);
-
-        if (condition == 'F') {
-            insert_front(mylist, data);
-        } else if (condition == 'L') {
-            insert_last(mylist, data);
-        } else if (condition == 'D') {
-            delete(mylist, data);
-        } else {
-            printf("Invalid Condition!\n");
+ 
+int main(){
+    Student *mylist[20];
+    for (int i = 0; i < 20; i++){
+        mylist[i] = (Student*) malloc(sizeof(Student));
+        scanf("%s %s %s %d %s %lf", 
+            mylist[i]->fname, mylist[i]->lname, mylist[i]->sex, &mylist[i]->age, mylist[i]->id, &mylist[i]->gpa);
+    }
+    char con[10];
+    scanf("%s",con);
+    for (int i = 0; i < 10;i++){
+        con[i] = tolower(con[i]);
+    }
+    if (strcmp(con,"name")==0) sort_name(mylist);
+    else if (strcmp(con, "surname") == 0) sort_surname(mylist);
+    else if (strcmp(con, "id") == 0) sort_id(mylist);
+ 
+    for (int i = 0; i < 20; i++){
+        if (strcmp(mylist[i]->sex, "Male") == 0){
+            printf("Mr %c %s (%d) ID: %s GPA %.2lf\n",mylist[i]->fname[0], mylist[i]->lname, mylist[i]->age, mylist[i]->id, mylist[i]->gpa);
+        }
+        else{
+            printf("Miss %c %s (%d) ID: %s GPA %.2lf\n",mylist[i]->fname[0], mylist[i]->lname, mylist[i]->age, mylist[i]->id, mylist[i]->gpa);
         }
     }
-
-    traverse(mylist);
-    DataNode* current = mylist->head;
-    while (current != NULL) {
-        free(current->data);
-        DataNode* temp = current;
-        current = current->next;
-        free(temp);
+    for (int i = 0; i < 20; i++) {
+        free(mylist[i]);
     }
-    free(mylist);
-    return 0;
 }
